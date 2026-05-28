@@ -126,6 +126,7 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
               restaurants={filtered}
               selected={selected}
               onSelect={setSelected}
+              community={filters.community}
             />
           </div>
         </div>
