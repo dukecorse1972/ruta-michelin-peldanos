@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ExternalLink,
   MapPin,
@@ -34,6 +34,10 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
     [rotationPool],
   );
   const [activeIndex, setActiveIndex] = useState(0);
+  // shownIndex lags behind activeIndex: only updates after fade-out completes
+  const [shownIndex, setShownIndex] = useState(0);
+  const [contentVisible, setContentVisible] = useState(true);
+  const crossfadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (rotationPool.length <= 1) {
@@ -52,9 +56,30 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
     return () => window.clearInterval(interval);
   }, [rotationPool.length, rotationKey]);
 
-  const spotlight = rotationPool[activeIndex % rotationPool.length] ?? null;
-  const visibleUnlocks = getRotatingItems(rotationPool, activeIndex + 1, 4);
+  // Crossfade: fade out → swap content → fade in (no remounts, no flash)
+  useEffect(() => {
+    if (crossfadeTimer.current) clearTimeout(crossfadeTimer.current);
+    setContentVisible(false);
+    crossfadeTimer.current = setTimeout(() => {
+      setShownIndex(activeIndex);
+      setContentVisible(true);
+    }, 160);
+    return () => {
+      if (crossfadeTimer.current) clearTimeout(crossfadeTimer.current);
+    };
+  }, [activeIndex]);
+
+  const spotlight = rotationPool[shownIndex % rotationPool.length] ?? null;
+  const visibleUnlocks = getRotatingItems(rotationPool, shownIndex + 1, 4);
   const featured = restaurants.slice(0, 8);
+
+  // Inline transition styles for crossfade
+  const fadeStyle = {
+    opacity: contentVisible ? 1 : 0,
+    transition: contentVisible
+      ? "opacity 320ms cubic-bezier(0.22, 1, 0.36, 1)"
+      : "opacity 160ms ease-in",
+  };
 
   if (!spotlight) {
     return (
@@ -73,15 +98,17 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
   return (
     <section className="overflow-hidden rounded-[1.5rem] border bg-[oklch(0.98_0.018_84)] shadow-sm">
       <div className="grid gap-0 lg:grid-cols-[minmax(0,1.08fr)_420px]">
-        <article className="relative min-h-[430px] overflow-hidden bg-[oklch(0.22_0.045_38)] text-[oklch(0.98_0.015_84)]">
+        <article
+          className="relative min-h-[430px] overflow-hidden bg-[oklch(0.22_0.045_38)] text-[oklch(0.98_0.015_84)]"
+          style={fadeStyle}
+        >
           {spotlight.image_url ? (
             <Image
-              key={spotlight.image_url}
               src={spotlight.image_url}
               alt={spotlight.name}
               fill
               sizes="(min-width: 1024px) 58vw, 100vw"
-              className="route-spotlight-image object-cover opacity-75"
+              className="object-cover opacity-75"
             />
           ) : (
             <div className="absolute inset-0">
@@ -89,10 +116,7 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
             </div>
           )}
           <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.16_0.055_38/.94),oklch(0.18_0.05_38/.68)_46%,oklch(0.18_0.05_38/.18))]" />
-          <div
-            key={spotlight.slug}
-            className="route-spotlight-content relative flex min-h-[430px] flex-col justify-between p-5 sm:p-7"
-          >
+          <div className="relative flex min-h-[430px] flex-col justify-between p-5 sm:p-7">
             <div className="flex flex-wrap items-center gap-2">
               <Badge
                 className="border-[oklch(0.95_0.02_84/.24)] bg-[oklch(0.95_0.02_84/.14)] text-[oklch(0.98_0.015_84)]"
@@ -186,13 +210,10 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
             </p>
             <div className="relative mt-2 min-h-[320px] overflow-hidden rounded-[1.35rem]">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
-              <div
-                key={`${rotationKey}-${activeIndex}`}
-                className="route-unlocks-rail space-y-2"
-              >
+              <div className="space-y-2" style={fadeStyle}>
                 {visibleUnlocks.map((restaurant, index) => (
                   <RouteUnlockButton
-                    key={`${restaurant.slug}-${activeIndex}-${index}`}
+                    key={`${restaurant.slug}-${index}`}
                     restaurant={restaurant}
                     index={index}
                     onPreview={onPreview}

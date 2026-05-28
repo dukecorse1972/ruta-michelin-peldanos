@@ -168,67 +168,16 @@ body {
 
 /* ─── Route board animations ──────────────────────────────────────────────── */
 
-/* Imagen spotlight: aparece con scale sutil + desaturación, sin blur pesado */
-.route-spotlight-image {
-  animation: route-spotlight-image 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Contenido spotlight: fade + subida suave, spring natural */
-.route-spotlight-content {
-  animation: route-spotlight-content 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 60ms;
-}
-
-/* Rail de visitados: crossfade limpio, sin translateY exagerado */
-.route-unlocks-rail {
-  animation: route-unlocks-rail 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Cada tarjeta visitada: stagger 40ms, escala sutil spring */
+/* Cada tarjeta visitada en su primer montaje: stagger sutil */
 .route-unlock-card {
-  animation: route-unlock-card 380ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
-  animation-delay: calc(60ms + var(--unlock-index, 0) * 40ms);
-}
-
-@keyframes route-spotlight-image {
-  from {
-    filter: saturate(0.7);
-    opacity: 0;
-    transform: scale(1.03);
-  }
-  to {
-    filter: saturate(1);
-    opacity: 0.75;
-    transform: scale(1);
-  }
-}
-
-@keyframes route-spotlight-content {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes route-unlocks-rail {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: route-unlock-card 360ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: calc(var(--unlock-index, 0) * 40ms);
 }
 
 @keyframes route-unlock-card {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.96);
+    transform: translateY(8px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -237,9 +186,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-spotlight-image,
-  .route-spotlight-content,
-  .route-unlocks-rail,
   .route-unlock-card {
     animation: none;
   }
