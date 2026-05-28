@@ -182,7 +182,7 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
             <p className="text-xs font-black uppercase text-muted-foreground">
               Restaurantes Visitados
             </p>
-            <div className="relative mt-2 h-[296px] overflow-hidden rounded-[1.35rem]">
+            <div className="relative mt-2 min-h-[320px] overflow-hidden rounded-[1.35rem]">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
               <div
                 key={`${rotationKey}-${activeIndex}`}
