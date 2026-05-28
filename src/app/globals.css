@@ -1,26 +1,171 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-sans);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.985 0.01 78);
+  --foreground: oklch(0.19 0.025 47);
+  --card: oklch(0.997 0.006 78);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.997 0.006 78);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.58 0.22 27);
+  --primary-foreground: oklch(0.985 0.01 78);
+  --secondary: oklch(0.91 0.055 83);
+  --secondary-foreground: oklch(0.25 0.05 55);
+  --muted: oklch(0.94 0.025 82);
+  --muted-foreground: oklch(0.48 0.035 58);
+  --accent: oklch(0.78 0.16 83);
+  --accent-foreground: oklch(0.22 0.045 44);
+  --destructive: oklch(0.59 0.22 25);
+  --destructive-foreground: oklch(0.98 0.01 78);
+  --border: oklch(0.86 0.035 75);
+  --input: oklch(0.9 0.03 75);
+  --ring: oklch(0.58 0.22 27);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 0%, oklch(0.95 0.08 83 / 0.58), transparent 28rem),
+    linear-gradient(180deg, oklch(0.985 0.01 78), oklch(0.955 0.025 70));
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: oklch(0.93 0.02 190);
+  font-family: inherit;
+}
+
+.restaurant-marker {
+  --marker-fill: oklch(0.84 0.15 83);
+  --marker-ring: oklch(0.997 0.006 78);
+  align-items: center;
+  background: var(--marker-fill);
+  border: 2px solid var(--marker-ring);
+  border-radius: 50% 50% 50% 8px;
+  box-shadow: 0 2px 6px oklch(0.19 0.025 47 / 0.28);
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  position: relative;
+  transform: rotate(-45deg);
+  width: 30px;
+  will-change: transform;
+}
+
+.restaurant-marker.visited {
+  --marker-ring: oklch(0.72 0.15 132);
+  box-shadow: 0 0 0 3px oklch(0.72 0.15 132 / 0.28), 0 2px 6px oklch(0.19 0.025 47 / 0.26);
+}
+
+.restaurant-marker .marker-stars {
+  align-items: center;
+  color: oklch(0.997 0.006 78);
+  display: flex;
+  font-weight: 900;
+  gap: 1px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  left: 50%;
+  position: absolute;
+  text-shadow: 0 1px 1px oklch(0.19 0.025 47 / 0.22);
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.restaurant-marker .marker-stars-visual-1 {
+  font-size: 18px;
+}
+
+.restaurant-marker .marker-stars-visual-2,
+.restaurant-marker .marker-stars-visual-3 {
+  font-size: 9px;
+}
+
+.restaurant-marker .marker-stars-visual-3 {
+  display: grid;
+  grid-template-columns: repeat(2, 8px);
+  grid-template-rows: 6px 6px;
+  place-items: center;
+  transform: translate(-50%, -49%) rotate(45deg);
+}
+
+.restaurant-marker .marker-stars-visual-3 .marker-star:nth-child(3) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: -2px;
+}
+
+.restaurant-marker .marker-check {
+  align-items: center;
+  background: oklch(0.72 0.15 132);
+  border: 2px solid oklch(0.997 0.006 78);
+  border-radius: 999px;
+  color: oklch(0.997 0.006 78);
+  display: flex;
+  font-size: 12px;
+  font-weight: 900;
+  height: 17px;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: -7px;
+  top: 2px;
+  transform: rotate(45deg);
+  width: 17px;
+}
+
+.marker-stars-1 {
+  --marker-fill: oklch(0.8 0.16 83);
+}
+
+.marker-stars-2 {
+  --marker-fill: oklch(0.66 0.16 42);
+}
+
+.marker-stars-3 {
+  --marker-fill: oklch(0.58 0.22 27);
+}
+
+::selection {
+  background: oklch(0.78 0.16 83 / 0.5);
 }

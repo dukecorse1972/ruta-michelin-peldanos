@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+/output
+
+# local Codex skills/tools
+/.codex
 
 # next.js
 /.next/
