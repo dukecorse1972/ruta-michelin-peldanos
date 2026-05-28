@@ -12,10 +12,36 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const missingEnv = [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "YOUTUBE_API_KEY",
+    "YOUTUBE_CHANNEL_ID",
+  ].filter((key) => !process.env[key]);
+
+  if (missingEnv.length) {
+    return NextResponse.json(
+      { error: "Missing cron environment variables.", missingEnv },
+      { status: 500 },
+    );
+  }
+
   const { searchParams } = new URL(request.url);
-  const result = await syncYoutubeVideos({
-    maxPages: searchParams.get("full") === "1" ? 100 : undefined,
-  });
+  let result;
+
+  try {
+    result = await syncYoutubeVideos({
+      maxPages: searchParams.get("full") === "1" ? 100 : undefined,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "YouTube sync failed.",
+        message: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({
     ok: true,
