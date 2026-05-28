@@ -45,7 +45,7 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
 
     const interval = window.setInterval(() => {
       setActiveIndex((index) => (index + 1) % rotationPool.length);
-    }, 4600);
+    }, 7600);
 
     return () => window.clearInterval(interval);
   }, [rotationPool.length, rotationKey]);
@@ -183,7 +183,7 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
 
           <div className="mt-6">
             <p className="text-xs font-black uppercase text-muted-foreground">
-              Visitados en movimiento
+              Restaurantes Visitados
             </p>
             <div className="relative mt-2 h-[296px] overflow-hidden rounded-[1.35rem]">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
@@ -202,11 +202,6 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
                 ))}
               </div>
             </div>
-            {visited.length > 1 ? (
-              <p className="mt-3 text-xs font-semibold text-muted-foreground">
-                El siguiente sube a la pieza destacada automáticamente.
-              </p>
-            ) : null}
           </div>
         </aside>
       </div>

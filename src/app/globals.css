@@ -167,20 +167,20 @@ body {
 }
 
 .route-spotlight-image {
-  animation: route-spotlight-image 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: route-spotlight-image 1200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .route-spotlight-content {
-  animation: route-spotlight-content 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: route-spotlight-content 1050ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .route-unlocks-rail {
-  animation: route-unlocks-rail 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: route-unlocks-rail 1250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .route-unlock-card {
-  animation: route-unlock-card 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--unlock-index, 0) * 55ms);
+  animation: route-unlock-card 980ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--unlock-index, 0) * 95ms);
 }
 
 @keyframes route-spotlight-image {
@@ -212,7 +212,7 @@ body {
 @keyframes route-unlocks-rail {
   from {
     opacity: 0.72;
-    transform: translateY(76px);
+    transform: translateY(92px);
   }
 
   to {
@@ -224,7 +224,7 @@ body {
 @keyframes route-unlock-card {
   from {
     opacity: 0;
-    transform: translateY(18px) scale(0.985);
+    transform: translateY(24px) scale(0.985);
   }
 
   to {
