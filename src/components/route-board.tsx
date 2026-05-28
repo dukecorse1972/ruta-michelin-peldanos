@@ -184,7 +184,6 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
             </p>
             <div className="relative mt-2 h-[296px] overflow-hidden rounded-[1.35rem]">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-[oklch(0.97_0.02_84)] to-transparent" />
               <div
                 key={`${rotationKey}-${activeIndex}`}
                 className="route-unlocks-rail space-y-2"
