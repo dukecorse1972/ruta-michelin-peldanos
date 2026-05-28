@@ -264,7 +264,7 @@ function RouteMiniCard({
   onPreview: (restaurant: Restaurant) => void;
 }) {
   return (
-    <article className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
+    <article className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-150 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
       <button
         type="button"
         className="block w-full text-left"
@@ -342,7 +342,7 @@ function RouteUnlockButton({
   return (
     <button
       type="button"
-      className="route-unlock-card group flex w-full items-center gap-3 rounded-2xl border bg-card p-2 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
+      className="route-unlock-card group flex w-full items-center gap-3 rounded-2xl border bg-card p-2 text-left shadow-sm transition-all duration-150 ease-out hover:-translate-y-0.5 hover:scale-[1.015] hover:border-primary/40 hover:shadow-md active:scale-[0.985] active:shadow-sm"
       style={{ ["--unlock-index" as string]: index }}
       onClick={() => onPreview(restaurant)}
     >

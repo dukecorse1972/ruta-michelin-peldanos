@@ -166,32 +166,38 @@ body {
   --marker-fill: oklch(0.58 0.22 27);
 }
 
+/* ─── Route board animations ──────────────────────────────────────────────── */
+
+/* Imagen spotlight: aparece con scale sutil + desaturación, sin blur pesado */
 .route-spotlight-image {
-  animation: route-spotlight-image 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: route-spotlight-image 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Contenido spotlight: fade + subida suave, spring natural */
 .route-spotlight-content {
-  animation: route-spotlight-content 1050ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: route-spotlight-content 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 60ms;
 }
 
+/* Rail de visitados: crossfade limpio, sin translateY exagerado */
 .route-unlocks-rail {
-  animation: route-unlocks-rail 1250ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: route-unlocks-rail 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Cada tarjeta visitada: stagger 40ms, escala sutil spring */
 .route-unlock-card {
-  animation: route-unlock-card 980ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--unlock-index, 0) * 95ms);
+  animation: route-unlock-card 380ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: calc(60ms + var(--unlock-index, 0) * 40ms);
 }
 
 @keyframes route-spotlight-image {
   from {
-    filter: saturate(0.86) blur(4px);
-    opacity: 0.34;
-    transform: scale(1.045);
+    filter: saturate(0.7);
+    opacity: 0;
+    transform: scale(1.03);
   }
-
   to {
-    filter: saturate(1) blur(0);
+    filter: saturate(1);
     opacity: 0.75;
     transform: scale(1);
   }
@@ -200,9 +206,8 @@ body {
 @keyframes route-spotlight-content {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -211,10 +216,9 @@ body {
 
 @keyframes route-unlocks-rail {
   from {
-    opacity: 0.72;
-    transform: translateY(92px);
+    opacity: 0;
+    transform: translateY(16px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -224,9 +228,8 @@ body {
 @keyframes route-unlock-card {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.985);
+    transform: translateY(10px) scale(0.96);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
