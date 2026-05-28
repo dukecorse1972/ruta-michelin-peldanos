@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import {
   ExternalLink,
   MapPin,
@@ -25,7 +26,32 @@ type RouteBoardProps = {
 export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
   const visited = restaurants.filter((restaurant) => restaurant.visited);
   const pending = restaurants.filter((restaurant) => !restaurant.visited);
-  const spotlight = visited[0] ?? restaurants[0] ?? null;
+  const rotationPool = visited.length ? visited : restaurants;
+  const rotationKey = useMemo(
+    () => rotationPool.map((restaurant) => restaurant.slug).join("|"),
+    [rotationPool],
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (rotationPool.length <= 1) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduceMotion.matches) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % rotationPool.length);
+    }, 4600);
+
+    return () => window.clearInterval(interval);
+  }, [rotationPool.length, rotationKey]);
+
+  const spotlight = rotationPool[activeIndex % rotationPool.length] ?? null;
+  const visibleUnlocks = getRotatingItems(rotationPool, activeIndex + 1, 4);
   const featured = [
     ...visited.filter((restaurant) => restaurant.slug !== spotlight?.slug),
     ...pending.filter((restaurant) => restaurant.slug !== spotlight?.slug),
@@ -51,15 +77,23 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
         <article className="relative min-h-[430px] overflow-hidden bg-[oklch(0.22_0.045_38)] text-[oklch(0.98_0.015_84)]">
           {spotlight.image_url ? (
             <Image
+              key={spotlight.image_url}
               src={spotlight.image_url}
               alt={spotlight.name}
               fill
               sizes="(min-width: 1024px) 58vw, 100vw"
-              className="object-cover opacity-75"
+              className="route-spotlight-image object-cover opacity-75"
             />
-          ) : null}
+          ) : (
+            <div className="absolute inset-0">
+              <FallbackPlate name={spotlight.name} />
+            </div>
+          )}
           <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.16_0.055_38/.94),oklch(0.18_0.05_38/.68)_46%,oklch(0.18_0.05_38/.18))]" />
-          <div className="relative flex min-h-[430px] flex-col justify-between p-5 sm:p-7">
+          <div
+            key={spotlight.slug}
+            className="route-spotlight-content relative flex min-h-[430px] flex-col justify-between p-5 sm:p-7"
+          >
             <div className="flex flex-wrap items-center gap-2">
               <Badge
                 className="border-[oklch(0.95_0.02_84/.24)] bg-[oklch(0.95_0.02_84/.14)] text-[oklch(0.98_0.015_84)]"
@@ -147,34 +181,32 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
             <RouteStat label="Por caer" value={pending.length} />
           </div>
 
-          <div className="mt-6 space-y-2">
+          <div className="mt-6">
             <p className="text-xs font-black uppercase text-muted-foreground">
-              Últimos desbloqueados
+              Visitados en movimiento
             </p>
-            {(visited.length ? visited : restaurants).slice(0, 4).map((restaurant) => (
-              <button
-                key={restaurant.slug}
-                type="button"
-                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-2 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
-                onClick={() => onPreview(restaurant)}
+            <div className="relative mt-2 h-[296px] overflow-hidden rounded-[1.35rem]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-[oklch(0.97_0.02_84)] to-transparent" />
+              <div
+                key={`${rotationKey}-${activeIndex}`}
+                className="route-unlocks-rail space-y-2"
               >
-                <RestaurantThumb restaurant={restaurant} />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-black">
-                    {restaurant.name}
-                  </span>
-                  <span className="mt-0.5 flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                    {restaurant.youtube_url ? (
-                      <PlayCircle className="size-3.5 text-primary" />
-                    ) : (
-                      <MapPin className="size-3.5" />
-                    )}
-                    {restaurant.youtube_url ? "Video listo" : restaurant.city}
-                  </span>
-                </span>
-                <StarCluster stars={restaurant.stars} />
-              </button>
-            ))}
+                {visibleUnlocks.map((restaurant, index) => (
+                  <RouteUnlockButton
+                    key={`${restaurant.slug}-${activeIndex}-${index}`}
+                    restaurant={restaurant}
+                    index={index}
+                    onPreview={onPreview}
+                  />
+                ))}
+              </div>
+            </div>
+            {visited.length > 1 ? (
+              <p className="mt-3 text-xs font-semibold text-muted-foreground">
+                El siguiente sube a la pieza destacada automáticamente.
+              </p>
+            ) : null}
           </div>
         </aside>
       </div>
@@ -205,6 +237,21 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
       </div>
     </section>
   );
+}
+
+function getRotatingItems(
+  restaurants: Restaurant[],
+  startIndex: number,
+  count: number,
+) {
+  if (!restaurants.length) {
+    return [];
+  }
+
+  return Array.from({ length: Math.min(count, restaurants.length) }, (_, index) => {
+    const itemIndex = (startIndex + index) % restaurants.length;
+    return restaurants[itemIndex];
+  });
 }
 
 function RouteStat({ label, value }: { label: string; value: number }) {
@@ -287,6 +334,41 @@ function RestaurantThumb({ restaurant }: { restaurant: Restaurant }) {
         </span>
       )}
     </span>
+  );
+}
+
+function RouteUnlockButton({
+  restaurant,
+  index,
+  onPreview,
+}: {
+  restaurant: Restaurant;
+  index: number;
+  onPreview: (restaurant: Restaurant) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="route-unlock-card group flex w-full items-center gap-3 rounded-2xl border bg-card p-2 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
+      style={{ ["--unlock-index" as string]: index }}
+      onClick={() => onPreview(restaurant)}
+    >
+      <RestaurantThumb restaurant={restaurant} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-black">
+          {restaurant.name}
+        </span>
+        <span className="mt-0.5 flex items-center gap-1 text-xs font-semibold text-muted-foreground">
+          {restaurant.youtube_url ? (
+            <PlayCircle className="size-3.5 text-primary" />
+          ) : (
+            <MapPin className="size-3.5" />
+          )}
+          {restaurant.youtube_url ? "Video listo" : restaurant.city}
+        </span>
+      </span>
+      <StarCluster stars={restaurant.stars} />
+    </button>
   );
 }
 
