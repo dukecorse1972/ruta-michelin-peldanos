@@ -8,16 +8,6 @@ type SeedRestaurant = {
   michelin_url: string | null;
 };
 
-type VideoWithRestaurant = {
-  youtube_video_id: string;
-  thumbnail_url: string | null;
-  restaurants: {
-    slug: string;
-    name: string;
-    image_url: string | null;
-  } | null;
-};
-
 const SEED_PATH = "data/restaurants.seed.json";
 const CACHE_PATH = ".next/michelin-image-enrichment.json";
 
@@ -67,31 +57,11 @@ async function main() {
     }
   }
 
-  const { data: videos, error: videoError } = await supabase
-    .from("youtube_videos")
-    .select("youtube_video_id, thumbnail_url, restaurants(slug, name, image_url)")
-    .not("matched_restaurant_id", "is", null)
-    .returns<VideoWithRestaurant[]>();
-
-  if (videoError) {
-    throw videoError;
-  }
-
-  for (const video of videos ?? []) {
-    const restaurant = video.restaurants;
-    if (!restaurant || restaurant.image_url || !video.thumbnail_url) {
-      continue;
-    }
-
-    const seedRestaurant = seedBySlug.get(restaurant.slug);
-    if (seedRestaurant?.image_url) {
-      continue;
-    }
-
-    updates.set(restaurant.slug, video.thumbnail_url);
-  }
-
   for (const [slug, imageUrl] of updates) {
+    if (imageUrl.includes("i.ytimg.com")) {
+      continue;
+    }
+
     const seedRestaurant = seedBySlug.get(slug);
     if (seedRestaurant && !seedRestaurant.image_url) {
       seedRestaurant.image_url = imageUrl;

@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "axwwgrkdco.cloudimg.io",
       },
+      {
+        protocol: "https",
+        hostname: "montia.es",
+      },
+      {
+        protocol: "https",
+        hostname: "www.restaurantelienzo.com",
+      },
     ],
   },
 };
