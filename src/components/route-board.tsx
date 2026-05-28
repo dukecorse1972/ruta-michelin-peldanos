@@ -52,10 +52,7 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
 
   const spotlight = rotationPool[activeIndex % rotationPool.length] ?? null;
   const visibleUnlocks = getRotatingItems(rotationPool, activeIndex + 1, 4);
-  const featured = [
-    ...visited.filter((restaurant) => restaurant.slug !== spotlight?.slug),
-    ...pending.filter((restaurant) => restaurant.slug !== spotlight?.slug),
-  ].slice(0, 8);
+  const featured = restaurants.slice(0, 8);
 
   if (!spotlight) {
     return (
@@ -210,10 +207,10 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase text-primary">
-              Siguientes paradas del filtro
+              Restaurantes del filtro
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Elige una tarjeta para abrirla en el panel sin perder el mapa.
+              Esta parrilla responde solo a la búsqueda, estrellas, estado y comunidad.
             </p>
           </div>
           <span className="text-sm font-bold text-muted-foreground">
