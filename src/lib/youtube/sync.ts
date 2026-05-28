@@ -75,7 +75,7 @@ export async function syncYoutubeVideos(options: SyncYoutubeOptions = {}) {
 
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`YouTube API error: ${response.status}`);
+      throw new Error(await formatYoutubeError(response));
     }
 
     const payload = (await response.json()) as YoutubePlaylistPayload;
@@ -200,7 +200,7 @@ async function getUploadsPlaylistId(apiKey: string, channelId: string) {
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`YouTube API error: ${response.status}`);
+    throw new Error(await formatYoutubeError(response));
   }
 
   const payload = (await response.json()) as YoutubeChannelPayload;
@@ -212,4 +212,9 @@ async function getUploadsPlaylistId(apiKey: string, channelId: string) {
   }
 
   return uploadsPlaylistId;
+}
+
+async function formatYoutubeError(response: Response) {
+  const body = await response.text();
+  return `YouTube API error: ${response.status} ${body.slice(0, 500)}`;
 }
