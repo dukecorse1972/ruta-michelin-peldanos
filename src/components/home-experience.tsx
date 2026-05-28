@@ -131,7 +131,7 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
         </div>
 
         <section className="lg:col-span-2">
-          <RouteBoard restaurants={filtered} onPreview={setSelected} />
+          <RouteBoard restaurants={filtered} allRestaurants={restaurants} onPreview={setSelected} />
         </section>
       </section>
 

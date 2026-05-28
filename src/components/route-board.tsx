@@ -20,13 +20,15 @@ import { cn, formatLocation } from "@/lib/utils";
 
 type RouteBoardProps = {
   restaurants: Restaurant[];
+  allRestaurants: Restaurant[];
   onPreview: (restaurant: Restaurant) => void;
 };
 
-export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
+export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoardProps) {
+  const allVisited = allRestaurants.filter((restaurant) => restaurant.visited);
   const visited = restaurants.filter((restaurant) => restaurant.visited);
   const pending = restaurants.filter((restaurant) => !restaurant.visited);
-  const rotationPool = visited.length ? visited : restaurants;
+  const rotationPool = allVisited.length ? allVisited : allRestaurants;
   const rotationKey = useMemo(
     () => rotationPool.map((restaurant) => restaurant.slug).join("|"),
     [rotationPool],
@@ -168,7 +170,7 @@ export function RouteBoard({ restaurants, onPreview }: RouteBoardProps) {
               </h3>
             </div>
             <div className="rounded-2xl border bg-card px-3 py-2 text-right shadow-sm">
-              <p className="text-2xl font-black leading-none">{visited.length}</p>
+              <p className="text-2xl font-black leading-none">{allVisited.length}</p>
               <p className="text-xs font-bold text-muted-foreground">visitados</p>
             </div>
           </div>
