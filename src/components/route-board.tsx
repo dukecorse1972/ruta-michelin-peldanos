@@ -105,7 +105,6 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
       clearInterval(interval);
       flushTimers();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool.length]);
 
   // VISIBLE+1 cards: next in queue (currIdx+1) + following ones + 1 entering from below
@@ -116,7 +115,6 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
         { length: VISIBLE + 1 },
         (_, i) => pool[(currIdx + 1 + i) % pool.length],
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currIdx, pool],
   );
 
@@ -280,7 +278,6 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
             >
               {/* Fade edges */}
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 bg-gradient-to-b from-[oklch(0.97_0.02_84)] to-transparent" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-[oklch(0.97_0.02_84)] to-transparent" />
 
               {/* Sliding strip */}
               <div style={tickerStyle}>

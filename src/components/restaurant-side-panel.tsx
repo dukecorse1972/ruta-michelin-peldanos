@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import {
   ArrowUpRight,
@@ -27,6 +28,19 @@ export function RestaurantSidePanel({
   restaurant: Restaurant | null;
   onClose: () => void;
 }) {
+  useEffect(() => {
+    if (!restaurant) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [restaurant]);
+
   if (!restaurant) {
     return null;
   }
@@ -44,16 +58,20 @@ export function RestaurantSidePanel({
     <>
       <button
         type="button"
-        className="fixed inset-0 z-[2500] cursor-default bg-foreground/18 backdrop-blur-[1px]"
+        className="fixed inset-0 z-[2500] cursor-default bg-foreground/24 backdrop-blur-[1px]"
         aria-label="Cerrar panel de restaurante"
         onClick={onClose}
       />
 
       <aside
-        className="fixed inset-x-0 bottom-0 z-[2600] max-h-[88dvh] overflow-hidden rounded-t-[1.75rem] border bg-card shadow-[0_-18px_60px_oklch(0.19_0.025_47/0.28)] outline-none md:inset-x-auto md:bottom-6 md:right-6 md:top-24 md:flex md:w-[450px] md:max-h-none md:flex-col md:rounded-[1.75rem] md:shadow-[0_24px_80px_oklch(0.19_0.025_47/0.28)]"
+        className="fixed inset-x-3 bottom-3 z-[2600] flex max-h-[calc(100dvh-5.25rem)] flex-col overflow-hidden rounded-[1.5rem] border bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-18px_60px_oklch(0.19_0.025_47/0.28)] outline-none md:inset-x-auto md:bottom-6 md:right-6 md:top-24 md:w-[450px] md:max-h-none md:rounded-[1.75rem] md:pb-0 md:shadow-[0_24px_80px_oklch(0.19_0.025_47/0.28)]"
         aria-label={`Ficha rápida de ${restaurant.name}`}
+        aria-modal="true"
+        role="dialog"
       >
-        <div className="relative h-56 shrink-0 overflow-hidden bg-secondary md:h-60">
+        <div className="absolute left-1/2 top-2 z-20 h-1.5 w-12 -translate-x-1/2 rounded-full bg-card/75 shadow-sm md:hidden" />
+
+        <div className="relative h-44 shrink-0 overflow-hidden bg-secondary sm:h-52 md:h-60">
           {restaurant.image_url ? (
             <Image
               src={restaurant.image_url}
@@ -96,7 +114,7 @@ export function RestaurantSidePanel({
                 >
                   {restaurant.visited ? "Visitado" : "Todavía no visitado"}
                 </Badge>
-                <h2 className="line-clamp-2 text-3xl font-black leading-none tracking-tight text-primary-foreground">
+                <h2 className="line-clamp-2 text-2xl font-black leading-none tracking-tight text-primary-foreground sm:text-3xl">
                   {restaurant.name}
                 </h2>
               </div>
@@ -113,8 +131,8 @@ export function RestaurantSidePanel({
           </div>
         </div>
 
-        <div className="min-h-0 overflow-y-auto">
-          <div className="space-y-5 p-5 md:p-6">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <div className="space-y-4 p-4 md:space-y-5 md:p-6">
             <div className="space-y-3">
               <p className="flex items-start gap-2 text-sm font-medium leading-6 text-muted-foreground">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />

@@ -17,7 +17,7 @@ const DynamicMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="grid h-full min-h-[520px] place-items-center bg-muted">
+      <div className="grid h-full min-h-[390px] place-items-center bg-muted md:min-h-[520px]">
         <div className="text-center">
           <MapPinned className="mx-auto size-10 text-primary" />
           <p className="mt-3 font-semibold">Preparando el mapa Michelin...</p>
@@ -121,7 +121,7 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
               Limpiar filtros
             </Button>
           </div>
-          <div className="h-[66vh] min-h-[520px]">
+          <div className="h-[56dvh] min-h-[390px] md:h-[66vh] md:min-h-[520px]">
             <DynamicMap
               restaurants={filtered}
               selected={selected}

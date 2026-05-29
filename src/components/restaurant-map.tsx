@@ -81,7 +81,7 @@ export function RestaurantMap({
       minZoom={5}
       maxZoom={18}
       scrollWheelZoom
-      className="h-full min-h-[520px]"
+      className="h-full"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
