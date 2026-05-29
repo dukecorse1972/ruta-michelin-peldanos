@@ -166,30 +166,9 @@ body {
   --marker-fill: oklch(0.58 0.22 27);
 }
 
-/* ─── Route board animations ──────────────────────────────────────────────── */
+/* Route board: no custom animation classes needed.
+   The ticker uses inline transition styles for zero-flash crossfade. */
 
-/* Cada tarjeta visitada en su primer montaje: stagger sutil */
-.route-unlock-card {
-  animation: route-unlock-card 360ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
-  animation-delay: calc(var(--unlock-index, 0) * 40ms);
-}
-
-@keyframes route-unlock-card {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .route-unlock-card {
-    animation: none;
-  }
-}
 
 ::selection {
   background: oklch(0.78 0.16 83 / 0.5);
