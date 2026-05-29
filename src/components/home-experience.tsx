@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
-import { ChefHat, MapPinned } from "lucide-react";
+import { ChefHat, MapPinned, Sparkles, Star } from "lucide-react";
 import { ProgressCard } from "@/components/progress-card";
 import { RestaurantFilters } from "@/components/restaurant-filters";
 import { RestaurantSidePanel } from "@/components/restaurant-side-panel";
@@ -71,23 +71,39 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
     <main className="min-h-screen">
       <section className="mx-auto grid max-w-[1500px] gap-5 px-4 py-4 lg:grid-cols-[360px_1fr] lg:px-6">
         <div className="space-y-4">
-          <div className="rounded-xl border bg-card/90 p-5 shadow-sm">
-            <Badge className="bg-primary/10 text-primary" variant="outline">
-              Fan project
-            </Badge>
-            <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+          <div className="overflow-hidden rounded-xl border border-primary/15 bg-[radial-gradient(circle_at_18%_0%,oklch(0.87_0.15_78/.52),transparent_9.5rem),linear-gradient(145deg,oklch(0.995_0.006_73),oklch(0.965_0.028_78))] p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <Badge
+                className="gap-1.5 border-primary/20 bg-primary/10 text-primary"
+                variant="outline"
+              >
+                <Sparkles className="size-3.5" />
+                Fan project
+              </Badge>
+              <span className="rounded-full border border-amber-300/70 bg-amber-100/70 px-3 py-1 text-xs font-black text-amber-950 shadow-sm">
+                España 2026
+              </span>
+            </div>
+            <h1 className="mt-4 text-3xl font-black leading-none tracking-tight sm:text-4xl">
               La ruta Michelin de Peldaños
             </h1>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               Siguiendo, plato a plato, la aventura de visitar todos los estrella
               Michelin de España.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2 text-sm font-semibold">
-              <span className="rounded-full bg-secondary px-3 py-1">
-                {restaurants.length} restaurantes
+            <div className="mt-4 grid grid-cols-2 gap-2 text-sm font-black">
+              <span className="rounded-xl border border-border/80 bg-card/75 px-3 py-2 shadow-sm">
+                <span className="block text-lg leading-none">
+                  {restaurants.length}
+                </span>
+                <span className="text-xs text-muted-foreground">restaurantes</span>
               </span>
-              <span className="rounded-full bg-secondary px-3 py-1">
-                1, 2 y 3 estrellas
+              <span className="rounded-xl border border-border/80 bg-card/75 px-3 py-2 shadow-sm">
+                <span className="flex items-center gap-1 text-lg leading-none text-amber-500">
+                  <Star className="size-4 fill-current" />
+                  1-3
+                </span>
+                <span className="text-xs text-muted-foreground">estrellas</span>
               </span>
             </div>
           </div>

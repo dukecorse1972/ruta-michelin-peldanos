@@ -36,21 +36,22 @@ function FiltersForm({ filters, communities, onChange }: Props) {
   return (
     <div className="space-y-4">
       <label className="relative block">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" />
         <Input
-          className="pl-9"
+          className="h-11 rounded-xl border-primary/15 bg-card/80 pl-9 font-semibold shadow-sm placeholder:font-medium"
           placeholder="Buscar restaurante"
           value={filters.query}
           onChange={(event) => onChange({ ...filters, query: event.target.value })}
         />
       </label>
       <div>
-        <p className="mb-2 text-sm font-semibold">Estrellas</p>
+        <p className="mb-2 text-sm font-black text-foreground">Estrellas</p>
         <div className="grid grid-cols-3 gap-2">
           {([1, 2, 3] as StarCount[]).map((star) => (
             <Button
               key={star}
               type="button"
+              className="h-11 rounded-xl font-black shadow-sm transition-transform active:scale-[0.98]"
               variant={filters.stars.includes(star) ? "default" : "outline"}
               onClick={() => toggleStar(star)}
             >
@@ -66,7 +67,7 @@ function FiltersForm({ filters, communities, onChange }: Props) {
           onChange({ ...filters, status: value as RestaurantFiltersState["status"] })
         }
       >
-        <SelectTrigger>
+        <SelectTrigger className="h-11 rounded-xl border-primary/15 bg-card/80 font-semibold shadow-sm">
           <SelectValue placeholder="Estado" />
         </SelectTrigger>
         <SelectContent>
@@ -79,7 +80,7 @@ function FiltersForm({ filters, communities, onChange }: Props) {
         value={filters.community}
         onValueChange={(value) => onChange({ ...filters, community: value })}
       >
-        <SelectTrigger>
+        <SelectTrigger className="h-11 rounded-xl border-primary/15 bg-card/80 font-semibold shadow-sm">
           <SelectValue placeholder="Comunidad autónoma" />
         </SelectTrigger>
         <SelectContent>
@@ -96,9 +97,29 @@ function FiltersForm({ filters, communities, onChange }: Props) {
 }
 
 export function RestaurantFilters(props: Props) {
+  const activeFilters =
+    (props.filters.query.trim() ? 1 : 0) +
+    props.filters.stars.length +
+    (props.filters.status !== "all" ? 1 : 0) +
+    (props.filters.community !== "all" ? 1 : 0);
+
   return (
     <>
-      <div className="hidden rounded-lg border bg-card p-4 shadow-sm lg:block">
+      <div className="hidden rounded-xl border border-primary/15 bg-[radial-gradient(circle_at_100%_0%,oklch(0.82_0.16_40/.24),transparent_8rem),linear-gradient(145deg,oklch(0.995_0.006_74),oklch(0.975_0.018_82))] p-4 shadow-sm lg:block">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="flex items-center gap-2 text-sm font-black text-primary">
+              <SlidersHorizontal className="size-4" />
+              Afinar ruta
+            </p>
+            <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
+              Mapa, lista y fichas responden al filtro.
+            </p>
+          </div>
+          <span className="grid size-9 place-items-center rounded-full border border-primary/15 bg-card/85 text-sm font-black shadow-sm">
+            {activeFilters}
+          </span>
+        </div>
         <FiltersForm {...props} />
       </div>
       <Dialog>
