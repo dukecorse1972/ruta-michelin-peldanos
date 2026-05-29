@@ -116,7 +116,7 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
           />
         </div>
 
-        <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+        <div className="self-start overflow-hidden rounded-xl border bg-card shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-card/95 p-4">
             <div>
               <p className="flex items-center gap-2 text-sm font-bold text-primary">
