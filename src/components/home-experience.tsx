@@ -116,8 +116,8 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
           />
         </div>
 
-        <div className="self-start overflow-hidden rounded-xl border bg-card shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-card/95 p-4">
+        <div className="overflow-hidden rounded-xl border bg-card shadow-sm lg:flex lg:flex-col">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-card/95 p-4 lg:shrink-0">
             <div>
               <p className="flex items-center gap-2 text-sm font-bold text-primary">
                 <ChefHat className="size-4" />
@@ -137,7 +137,7 @@ export function HomeExperience({ restaurants }: { restaurants: Restaurant[] }) {
               Limpiar filtros
             </Button>
           </div>
-          <div className="h-[56dvh] min-h-[390px] md:h-[66vh] md:min-h-[520px]">
+          <div className="h-[56dvh] min-h-[390px] md:h-[66vh] md:min-h-[520px] lg:h-auto lg:flex-1">
             <DynamicMap
               restaurants={filtered}
               selected={selected}
