@@ -108,12 +108,13 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool.length]);
 
-  // VISIBLE+1 cards rendered: 4 visible + 1 entering from below
+  // VISIBLE+1 cards: next in queue (currIdx+1) + following ones + 1 entering from below
+  // currIdx itself is the spotlight → excluded from right column
   const rightCards = useMemo(
     () =>
       Array.from(
         { length: VISIBLE + 1 },
-        (_, i) => pool[(currIdx + i) % pool.length],
+        (_, i) => pool[(currIdx + 1 + i) % pool.length],
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currIdx, pool],
