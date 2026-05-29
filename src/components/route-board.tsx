@@ -38,6 +38,7 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
   const [shownIndex, setShownIndex] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
   const crossfadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (rotationPool.length <= 1) {
@@ -56,8 +57,13 @@ export function RouteBoard({ restaurants, allRestaurants, onPreview }: RouteBoar
     return () => window.clearInterval(interval);
   }, [rotationPool.length, rotationKey]);
 
-  // Crossfade: fade out → swap content → fade in (no remounts, no flash)
+  // Crossfade: fade out → swap content → fade in
+  // Skip first render to avoid flash on initial mount
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (crossfadeTimer.current) clearTimeout(crossfadeTimer.current);
     setContentVisible(false);
     crossfadeTimer.current = setTimeout(() => {
