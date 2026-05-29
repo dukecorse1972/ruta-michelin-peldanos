@@ -28,12 +28,12 @@ const VISIBLE  = 4;            // cards visible at once
 const WINDOW_H = VISIBLE * SLOT_H - GAP_H; // 328 px visible area
 
 // ─── Timing ───────────────────────────────────────────────────────────────────
-const TICK_MS        = 5800;  // ms between rotations
-const SCROLL_MS      = 680;   // right-column slide duration
-const FADE_OUT_AT_MS = 260;   // ms into tick: spotlight starts fading out
-const FADE_OUT_MS    = 180;   // ms: spotlight fade-out duration
+const TICK_MS        = 8500;  // ms between rotations
+const SCROLL_MS      = 850;   // right-column slide duration
+const FADE_OUT_AT_MS = 320;   // ms into tick: spotlight starts fading out
+const FADE_OUT_MS    = 200;   // ms: spotlight fade-out duration
 const SNAP_AT_MS     = SCROLL_MS; // ms into tick: snap + swap content + fade in
-const FADE_IN_MS     = 380;   // ms: spotlight fade-in duration
+const FADE_IN_MS     = 450;   // ms: spotlight fade-in duration
 
 type RouteBoardProps = {
   restaurants: Restaurant[];
