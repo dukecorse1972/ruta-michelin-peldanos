@@ -2,7 +2,13 @@
 
 import { Search, SlidersHorizontal, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -104,10 +110,12 @@ export function RestaurantFilters(props: Props) {
         </DialogTrigger>
         <DialogContent className="bottom-0 top-auto max-h-[86dvh] w-full max-w-none translate-y-0 rounded-b-none rounded-t-[1.5rem] p-5 sm:bottom-auto sm:top-1/2 sm:max-w-lg sm:-translate-y-1/2 sm:rounded-lg sm:p-6">
           <div className="mb-1 pr-8">
-            <p className="text-lg font-black tracking-tight">Filtros</p>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <DialogTitle className="text-lg font-black tracking-tight">
+              Filtros
+            </DialogTitle>
+            <DialogDescription className="mt-1 text-sm text-muted-foreground">
               Ajusta el mapa y las tarjetas de restaurantes.
-            </p>
+            </DialogDescription>
           </div>
           <FiltersForm {...props} />
         </DialogContent>
